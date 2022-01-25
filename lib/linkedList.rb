@@ -13,7 +13,7 @@ class LinkedList
   def append(value)
     node = Node.new(value)
     @head ||= node
-    if @tail.nil?
+    if !@tail
       @tail = node
     else
       @tail.next_node = node
@@ -22,14 +22,9 @@ class LinkedList
   end
 
   def prepend(value)
-    node = Node.new(value)
+    node = Node.new(value, @head)
     @tail ||= node
-    if @head.nil?
-      @head = node
-    else
-      node.next_node = @head
-      @head = node
-    end
+    @head = node
   end
 
   def size
@@ -62,6 +57,8 @@ class LinkedList
     "#{node.value}"
   end
 
+  # Debug pop method causing a undefined method for value
+  # Believe it is messing up the "string" of nodes read out, change next_node to a string value as potential fix
   def pop
     return nil if @head.nil?
 
@@ -70,48 +67,44 @@ class LinkedList
     node.next_node = nil
   end
 
-  # def find(input_value)
-  #   return nil if @head.nil?
-
-  #   node = @head
-  #   index = 0
-
-  #   loop do
-  #     p node.value
-  #     return index if input_value.eql? node.value
-
-  #     node = node.next_node
-  #     index += 1
-  #     break if node == @tail
-  #   end
-
-  #   nil
-  # end
-
-  def to_s
+  def find(input_value)
     return nil if @head.nil?
 
     node = @head
-    
-    until node.nil?
-      print "( #{node.value} ) -> "
+    index = 0
+
+    loop do
+      return index.to_s if input_value.eql? node.value
+
+      break if node.value == @tail.value
+
+      node = node.next_node
+      index += 1
+    end
+
+    nil
+  end
+
+  def to_s
+    node = @head
+    loop do
+      print "#{node.value} -> "
+
+      break if node.value == @tail.value
+
       node = node.next_node
     end
-    
-    print "( #{@tail.value} ) -> "
+
     print 'nil'
     puts
   end
 end
 
 list = LinkedList.new
+list.prepend('Data 5')
 list.append('Data 2')
 list.prepend('Data 1')
 list.prepend('Data 3')
 list.append('Data 4')
-puts list.size
-puts list.at(0)
-list.pop
-puts list.size
-puts list.to_s
-# puts list.find('Data 1')
+list.to_s
+p list.find('Data 4')

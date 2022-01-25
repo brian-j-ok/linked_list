@@ -6,4 +6,8 @@ class Node
     @value = value
     @next_node = next_node
   end
+
+  def to_s
+    "#{value}"
+  end
 end
