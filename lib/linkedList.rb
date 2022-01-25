@@ -57,14 +57,13 @@ class LinkedList
     "#{node.value}"
   end
 
-  # Debug pop method causing a undefined method for value
-  # Believe it is messing up the "string" of nodes read out, change next_node to a string value as potential fix
   def pop
     return nil if @head.nil?
 
     node = @head
     node = node.next_node until node.next_node == @tail
     node.next_node = nil
+    @tail = node
   end
 
   def find(input_value)
@@ -85,7 +84,24 @@ class LinkedList
     nil
   end
 
+  def contains?(value)
+    return nil if @head.nil?
+
+    node = @head
+    loop do
+      if node.value == value
+        return true
+      end
+      break if node == @tail
+      node = node.next_node
+    end
+
+    return false
+  end
+
   def to_s
+    return nil if @head.nil?
+
     node = @head
     loop do
       print "#{node.value} -> "
@@ -108,3 +124,7 @@ list.prepend('Data 3')
 list.append('Data 4')
 list.to_s
 p list.find('Data 4')
+p list.contains?('Data 4')
+list.pop
+p list.contains?('Data 4')
+list.to_s
